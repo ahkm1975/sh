@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+#v-local{ position: fixed; bottom: 10px; left: 10px; }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto;
+  gap: 10px;
+  /*background-color: #2196F3;*/
+  padding: 10px;
+}
+
+.grid-container > div {
+  background-color: #DCDCDC;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}
+
+.grid-container > div:not(.itema) {   height: 150px; }
+.itema {
+  grid-area: 1 / 2 / 5 / 6;
+}
+</style>
+<script>
+navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate;
+window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition
+  || window.msSpeechRecognition || window.oSpeechRecognition;
+</script>
+</head>
+
+<body>
+<div class="grid-container"><div class="itema"><video id="v-local" autoplay></video></div>
+  <div>1</div>
+  <div>2</div>
+  <div class="item3">3</div>
+  <div class="item4">4</div>
+  <div class="item5">5</div>
+  <div class="item6">6</div>
+  <div class="item7">7</div>
+
+  <div class="item9">9</div>
+  <div class="item10">10</div>
+  <div class="item11">11</div>
+  <div class="item12">12</div>
+  <div class="item13">13</div>
+  <div class="item14">14</div>
+  <div class="item15">15</div>
+
+    <div class="item10">10</div>
+  <div class="item11">11</div>
+  <div class="item12">12</div>
+  <div class="item13">13</div>
+  <div class="item14">14</div>
+  <div class="item15">15</div>
+
+    <div class="item10">10</div>
+  <div class="item11">11</div>
+  <div class="item12">12</div>
+  <div class="item13">13</div>
+  <div class="item14">14</div>
+  <div class="item15">15</div>
+</div>
+
+<div id="container">
+
+</div><script src="p.js"></script>
+<script>
+
+function hashParams(hash=window.location.search.substring(1)) {var ret = {};var match;var plus = /\+/g;var search = /([^\?&=]+)=([^&]*)/g;var decode = function(s) {return decodeURIComponent(s.replace(plus, " "));};
+while( match = search.exec(hash) ) ret[decode(match[1])] = decode(match[2]);return ret}
+var prm=hashParams();
+
+function strt(){
+if(!prm.u)return;
+const peer = new Peer(prm.u);
+//const peer = new Peer(prm.u,{host: 'pr.ahkm.repl.co', path: '/myapp', secure: true });
+//const peer = new Peer(prm.u,{host: 'localhost', port: 999, path: '/myapp', key: 'yt'});
+let myVideoStream;
+let myId;
+var videoGrid = document.getElementById('grid-container')
+var myvideo = document.getElementById('v-local');
+myvideo.muted = true;
+const peerConnections = {}
+navigator.mediaDevices.getUserMedia({
+  video:{width: '100px', height:'100px'},
+  audio:false
+}).then((stream)=>{
+  myVideoStream = stream;
+  myvideo.srcObject = stream;
+  peer.on('call' , (call)=>{
+    call.answer(stream);
+      const vid = document.createElement('video');
+    call.on('stream' , (userStream)=>{
+      addVideo(vid , userStream);
+    })
+    call.on('error' , (err)=>{
+      stream.close();myVideoStream=null; alert(err)
+    })
+    call.on("close", () => {
+        console.log(vid);
+        vid.remove();
+    })
+    peerConnections[call.peer] = call;
+  })
+}).catch(err=>{
+    alert(err.message)
+})
+
+peer.on('open' , (id)=>{
+  myId = id; console.log("open: "+myId);console.log(peer.connections);
+})
+
+peer.on('data' , (data)=>{
+  console.log("data: "+data);
+})
+
+peer.on('connection' , (data)=>{
+  console.log("connection: "+data);
+})
+
+peer.on('error' , (err)=>{
+    if(myVideoStream)myVideoStream.getTracks().forEach(track => {track.stop();});myvideo.remove();
+  //peer.disconnect();
+  console.log("error: " + err.type);
+});
+
+/*
+proxied: true,
+/// <iframe src="https://mycode.example.net/etc" allow="camera;microphone"></iframe>
+
+socket.on('userJoined' , id=>{
+  console.log("new user joined")
+  const call  = peer.call(id , myVideoStream);
+  const vid = document.createElement('video');
+  call.on('error' , (err)=>{
+    alert(err);
+  })
+  call.on('stream' , userStream=>{
+    addVideo(vid , userStream);
+  })
+  call.on('close' , ()=>{
+    vid.remove();
+    console.log("user disconect")
+  })
+  peerConnections[id] = call;
+})
+socket.on('userDisconnect' , id=>{
+  if(peerConnections[id]){
+    peerConnections[id].close();
+  }
+})
+*/
+
+function addVideo(video , stream){
+  video.srcObject = stream;
+  video.addEventListener('loadedmetadata', () => {video.play()})
+  videoGrid.append(video);
+}
+}
+
+//strt();
+var tm=window.setTimeout('strt();', 2000);
+
+//window.addEventListener("load", strt);
+</script>
+
+
+</body>
+</html>
