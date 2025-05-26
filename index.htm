@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="p.js"></script>
+<style>
+#v-local{padding: 0px; margin: 0px;}
+</style>
+</head>
+
+<body>
+<video id="v-local" src="v/hk.mp4"></video>
+
+<script>
+var myvideo = document.getElementById('v-local');
+
+function hashParams(hash=window.location.search.substring(1)) {var ret = {};var match;var plus = /\+/g;var search = /([^\?&=]+)=([^&]*)/g;var decode = function(s) {return decodeURIComponent(s.replace(plus, " "));};while( match = search.exec(hash) ) ret[decode(match[1])] = decode(match[2]); return ret;}
+var prm=window.localStorage.stor?JSON.parse(window.localStorage.stor):hashParams();
+
+function getLocalStream() {
+    navigator.mediaDevices.getUserMedia({audio:false, video:true}).then( stream => {
+        window.localStream = stream; //new Blob; //stream;
+    }).catch( err => {
+        alert( err); AaP.CallSub('chknet', true, prm.pg);
+    });
+}
+
+//myvideo.addEventListener('canplay', () => {
+  let stream; var screenStream; var screenSharing=false;
+  const fps = 0;
+  if (myvideo.captureStream) {
+    stream = myvideo.captureStream(fps);
+  } else if (myvideo.mozCaptureStream) {
+    stream = myvideo.mozCaptureStream(fps);
+  } else {
+    console.error('Stream capture is not supported');
+    stream = null;
+  }
+  window.localStream = stream;
+//});
+
+window.localStream = window.localStream; //getLocalStream();
+
+function startScreenShare() {
+    if (screenSharing) {
+        stopScreenSharing()
+    }
+
+    navigator.mediaDevices.getDisplayMedia({video: true}).then((stream) => {
+        screenStream = stream;
+        let videoTrack = screenStream.getVideoTracks()[0];
+        videoTrack.onended = () => {
+            stopScreenSharing()
+        }
+        if (peer) {
+          peer.on('call', function(call) { console.log(call)
+          call.answer(screenStream);
+          });
+            screenSharing = true
+        }
+
+    })
+}
+
+function stopScreenSharing() {
+    if (!screenSharing) return;
+//    let videoTrack = local_stream.getVideoTracks()[0];
+    if (peer) {
+        //let sender = currentPeer.peerConnection.getSenders().find(function (s) {return s.track.kind == videoTrack.kind;})sender.replaceTrack(videoTrack)
+    }
+    screenStream.getTracks().forEach(function (track) {
+        track.stop();
+    });
+    screenSharing = false
+}
+
+function strtscrn(){
+    peer = new Peer('YTC-vid-CALL');
+    peer.on('open', (id) => {console.log("Creating Room: "+id);});
+    window.setTimeout(startScreenShare, 1000);
+}
+
+function strtv(){
+const peer = new Peer(); var call;
+
+myvideo.muted = true;
+
+peer.on('open' , (id)=>{ myId = id; console.log("open: "+myId);
+call = peer.call( 'YTC-vid-CALL', window.localStream ); //, function(callr){console.log('call');
+call.on('stream', function(stream) { console.log("stream: "+stream);myvideo.srcObject = stream; myvideo.addEventListener( 'loadedmetadata', () => {myvideo.play()}) });
+//});
+})
+
+peer.on('data' , (data)=>{console.log("data: "+data);})
+
+peer.on('connection' , (data)=>{console.log("connection: "+data);})
+
+peer.on('error' , (err)=>{console.log("error: " + err.type);});
+
+}
+
+if(prm.a=="b") strtscrn(); else if(prm.a=="v")window.setTimeout('strtv();', 2000);
+
+</script>
+
+
+</body>
+</html>
