@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html dir="rtl">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wroldtrust</title>
+<link rel="stylesheet" href="style/tbldv.css">
+<script type="text/javascript" src="js/jquery.js"></script><script type="text/javascript" src="pgntion.js"></script><script type="text/javascript" src="tbl.js"></script>
+<style type="text/css">
+.ashad {
+    position: absolute; top: 25%; left: 10%; padding: 5px; display: none; max-width: 90%; min-width: 50%; width: 70%; height: auto; direction: rtl;
+    background-color: #3F79B4;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    -moz-border-top-left-radius: 15px;
+    -moz-border-top-right-radius: 15px;
+    -moz-border-bottom-left-radius: 15px;
+    -moz-border-bottom-right-radius: 15px;
+    box-shadow: 8px 8px 8px 0.5px #888888;
+}
+
+.forma { background-color: #DFBF0B; text-align: center; padding: 20px; margin: 20px; direction: rtl; }
+.ashdowtxt {
+    color: #FFFFB9; text-align: center; font-size: 18px; font-weight: bold; margin: 10px;
+    text-shadow: 3px 3px #00356A;
+}
+.dvftd { display: inline-block; box-sizing: border-box; -moz-box-sizing: border-box; width: 50%; margin-bottom: 10px; text-align: center; }
+.dvftd > div{
+    display: inline-block;box-sizing: border-box; -moz-box-sizing: border-box;color: #800000; width: 20%;  padding: auto; font-size: 16px; font-weight: bold; text-shadow: 0px 1px 0px rgba(255,255,255,.8);
+}
+.dvftd input, .dvftd select {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding-left: 8px; padding-right: 15px; margin-right: 10px;
+    background-color: #FFFFB9;
+    color: #660000;
+    width: 70%;
+    height: 41px;
+    opacity: 1;
+    border: 1px solid #666666;
+    border-radius: 11px;
+    -webkit-border-radius: 11px;
+    -moz-border-radius: 11px;
+    -ms-border-radius: 11px;
+    -o-border-radius: 11px;
+    box-shadow: 0px 0px 0px 2px #660000 inset;
+    -webkit-box-shadow: 0px 0px 0px 2px #660000 inset;
+    -moz-box-shadow: 0px 0px 0px 2px #660000 inset;
+    -ms-box-shadow: 0px 0px 0px 2px #660000 inset;
+    -o-box-shadow: 0px 0px 0px 2px #660000 inset;
+}
+
+.txtclr{
+  color: #660033;
+}
+.smmnu { width: 40px; background-color: #000000; }
+.active {
+  background-color: #3399FF; color: #000000;
+}
+a:hover:not(.active) { background-color: #111; }
+table.tbldv tfoot .links a.active, table.tbldv tfoot .links a:hover:not(.active) { background-color: #800000; color: #FFFF00; }
+.crntpg { display: none; height: 430px; }
+.dvglry { float: left; width: 25%; height: 130px; padding: 0 5px 10px; }
+.glry { width: 100%; height: 100%; }
+.dvcntnt{ padding: 5px; height: 100%; border: 1px; }
+.dlimg, .vwimg { width: 32px; height:32px; cursor: pointer; }
+.trwisa { padding: 8px; height: 70px; background-image: url(images/logo.png); background-position: right; background-size: 80px 60px; -webkit-background-size: 80px 60px; -moz-background-size: 80px 60px; -ms-background-size: 80px 60px; background-repeat: no-repeat; }
+#tbldv, .tbldv { display: none; }
+.tdedt, .tddl { width:14; height:14; cursor: pointer; }
+.tdedt:hover, .tddl:hover { background-color: #000000; }
+#usrdv { font-weight: bolder;font-size: 1.0vw; }
+#usrdv > img { cursor: pointer; margin-right: 5px; border: none; width: 25px; height: 25px; }
+
+#pagination {
+    display: block; direction: rtl;
+    vertical-align: middle;
+}
+#pagination a, #pagination i {
+    display: inline-block;
+    vertical-align: middle;
+    width: 22px;
+    color: #7D7D7D;
+    text-align: center;
+    font-size: 10px;
+    padding: 3px 0 2px 0;
+    -webkit-user-select:none;
+       -moz-user-select:none;
+        -ms-user-select:none;
+         -o-user-select:none;
+            user-select:none;
+}
+
+#pagination a {
+    margin: 0 2px 0 2px;
+    border-radius: 4px;
+    border: 1px solid #E3E3E3;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 0 #FFF, 0 1px 2px #666;
+    text-shadow: 0 1px 1px #FFF;
+    background-color: #E6E6E6;
+    background-image: -webkit-linear-gradient(top, #F3F3F3, #D7D7D7);
+    background-image:    -moz-linear-gradient(top, #F3F3F3, #D7D7D7);
+    background-image:     -ms-linear-gradient(top, #F3F3F3, #D7D7D7);
+    background-image:      -o-linear-gradient(top, #F3F3F3, #D7D7D7);
+    background-image:         linear-gradient(top, #F3F3F3, #D7D7D7);
+}
+#pagination i {
+    margin: 0 3px 0 3px;
+}
+#pagination a.current {
+    border: 1px solid #E9E9E9;
+    box-shadow: 0 1px 1px #999;
+    background-color: #DFDFDF;
+    background-image: -webkit-linear-gradient(top, #D0D0D0, #EBEBEB);
+    background-image:    -moz-linear-gradient(top, #D0D0D0, #EBEBEB);
+    background-image:     -ms-linear-gradient(top, #D0D0D0, #EBEBEB);
+    background-image:      -o-linear-gradient(top, #D0D0D0, #EBEBEB);
+    background-image:         linear-gradient(top, #D0D0D0, #EBEBEB);
+}
+
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {
+    width: 100%;
+    padding: 0;
+  }
+
+}
+
+@media screen and (max-width: 750px) {
+  .topnav .mnudv {
+    float: none;
+    width: 100%;
+  }
+  .topnav {
+    float: none;
+    width: 100%; direction: rtl;
+  }
+  .limg {width: 42px; height: 32px;}
+  #mnus { display: none; }
+  .abt { font-size: 18px; }
+  .dvglry { float: left; width: 25%; height: 130px; padding: 0 5px 10px; }
+  .glry { width: 100%; height: 100%; }
+  .dvcntnt{ padding: 5px; height: 100%; border: 1px; }
+  .dlimg, .vwimg { width: 32px; height:32px; cursor: pointer; }
+  .trwisa { padding: 8px; height: 70px; background-image: url(images/logo.png); background-position: right; background-size: 80px 60px; -webkit-background-size: 80px 60px; -moz-background-size: 80px 60px; -ms-background-size: 80px 60px; background-repeat: no-repeat; }
+}
+</style>
+</head>
+<body>
+
+</body>
+<script>
+
+$(document).ready(function() {
+var tbls=new tbl("usrs");
+tbls.cnedt=false;
+tbls.init();
+});
+
+</script>
+
+</html>
