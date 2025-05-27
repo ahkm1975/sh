@@ -1,0 +1,87 @@
+<html>
+<head>
+<script>
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1);
+  var a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+</script>
+</head>
+<body>
+<p id="demo">Click the button to get your position.</p>
+<p id="demo2">Click the button to get your position.</p>
+<button onclick="getLocation()">Try It</button>
+
+<div id="mapholder">
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1924.3156538214923!2d44.23609463565707!3d15.287889231919815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1748025813862!5m2!1sen!2s" width="100%" height="800" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<script>
+var x = document.getElementById("demo");
+var x2 = document.getElementById("demo2");
+var lat1;
+var lat2;
+var lon1;
+var lon2;
+var reslt;
+lat2="15.387152791009783";lat1="15.387152791009783";
+lon2="44.21828608268831"; lon1="44.21828608268831";
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+  var latlon = position.coords.latitude + "," + position.coords.longitude;
+  x.innerHTML = latlon;
+
+  reslt=getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2);
+  x2.innerHTML = reslt;
+
+  lat1 = position.coords.latitude;
+  lon1 = position.coords.longitude;
+
+/*    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+    +latlon+"&zoom=14&size=400x300&sensor=false";
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+*/
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+getLocation();
+</script>
+
+</body>
+</html>
